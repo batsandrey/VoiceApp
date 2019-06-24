@@ -301,6 +301,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.speech_btn:
                 listenToSpeech();
+                Toast.makeText(getBaseContext(), "Speech on",
+                        Toast.LENGTH_SHORT).show();
                 break;
             case R.id.flash_off_btn:
                 turnFlashlightOff();

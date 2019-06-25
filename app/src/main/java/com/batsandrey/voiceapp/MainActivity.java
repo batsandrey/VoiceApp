@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //        getCamera();
 
-        hasFlash = getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+//        hasFlash = getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        turnFlashlightOff();
+//        turnFlashlightOff();
     }
 
     @Override
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onPause();
 
         // on pause turn off the flash
-        turnFlashlightOff();
+//        turnFlashlightOff();
     }
 
     @Override
@@ -109,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
 
-        if (hasFlash)
-            turnFlashlightOn();
+//        if (hasFlash)
+//            turnFlashlightOn();
     }
 
     @Override
@@ -152,23 +153,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void getCamera() {
-
-        if (mCamera == null) {
-            try {
-                mCamera = Camera.open();
-                parameters = mCamera.getParameters();
-            }catch (Exception e) {
-
-            }
-        }
-
-    }
+//    private void getCamera() {
+//
+//        if (mCamera == null) {
+//            try {
+//                mCamera = Camera.open();
+//                parameters = mCamera.getParameters();
+//            }catch (Exception e) {
+//
+//            }
+//        }
+//
+//    }
 
     private void checkValidWords(ArrayList<String> suggestedWords) {
         for (String word : suggestedWords) {
             if (word.contains("andrey")) {
-                turnFlashlightOn();
+//                turnFlashlightOn();
+//                turnScreenLightness();
+
                 Toast.makeText(getBaseContext(), "Right word",
                         Toast.LENGTH_SHORT).show();
             }
@@ -179,51 +182,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void turnFlashlightOn() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            try {
-                camManager = (CameraManager) getApplicationContext().getSystemService(Context.CAMERA_SERVICE);
-                if (camManager != null) {
-                    cameraId = camManager.getCameraIdList()[0];
-                    camManager.setTorchMode(cameraId, true);
-                }
-            } catch (CameraAccessException e) {
-                Log.e(TAG, e.toString());
-            }
-        } else {
-            mCamera = Camera.open();
-            parameters = mCamera.getParameters();
-            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-            mCamera.setParameters(parameters);
-            mCamera.startPreview();
-        }
-    }
-
-    public void turnFlashlightOff() {
-        try {
-            if (getPackageManager().hasSystemFeature(
-                    PackageManager.FEATURE_CAMERA_FLASH)) {
-                mCamera.stopPreview();
-                mCamera.release();
-                mCamera = null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getBaseContext(), "Exception flashLightOff",
-                    Toast.LENGTH_SHORT).show();
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            try {
-                camManager.setTorchMode(cameraId, false);
-            } catch (CameraAccessException e) {
-                e.printStackTrace();
-                Toast.makeText(getBaseContext(), "Exception flashLightOff",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-
-    }
-
+//    private void turnFlashlightOn() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            try {
+//                camManager = (CameraManager) getApplicationContext().getSystemService(Context.CAMERA_SERVICE);
+//                if (camManager != null) {
+//                    cameraId = camManager.getCameraIdList()[0];
+//                    camManager.setTorchMode(cameraId, true);
+//                }
+//            } catch (CameraAccessException e) {
+//                Log.e(TAG, e.toString());
+//            }
+//        } else {
+//            mCamera = Camera.open();
+//            parameters = mCamera.getParameters();
+//            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+//            mCamera.setParameters(parameters);
+//            mCamera.startPreview();
+//        }
+//    }
+//
+//    public void turnFlashlightOff() {
+//        try {
+//            if (getPackageManager().hasSystemFeature(
+//                    PackageManager.FEATURE_CAMERA_FLASH)) {
+//                mCamera.stopPreview();
+//                mCamera.release();
+//                mCamera = null;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            Toast.makeText(getBaseContext(), "Exception flashLightOff",
+//                    Toast.LENGTH_SHORT).show();
+//        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            try {
+//                camManager.setTorchMode(cameraId, false);
+//            } catch (CameraAccessException e) {
+//                e.printStackTrace();
+//                Toast.makeText(getBaseContext(), "Exception flashLightOff",
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//
+//    }
 
     private void initializeViews() {
         speechBtn = findViewById(R.id.speech_btn);
@@ -305,7 +307,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Toast.LENGTH_SHORT).show();
                 break;
             case R.id.flash_off_btn:
-                turnFlashlightOff();
+//                turnFlashlightOff();
+                Intent intent = new Intent(this, FlashlightActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 Toast.makeText(getBaseContext(), "On light",
                         Toast.LENGTH_SHORT).show();
                 break;
